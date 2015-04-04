@@ -13,3 +13,7 @@
 0.0.4
 
 - Got the send commands function working, along with showing output on screen
+
+0.0.5
+
+- Fix Notifications following title change
