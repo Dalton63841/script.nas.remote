@@ -18,32 +18,32 @@ dialog = xbmcgui.Dialog()
 entries = ["Power On/Off", "Send A Command"]
 nr = dialog.select("What Would You Like To Do?", entries)
 if nr == 0:
-    xbmc.executebuiltin('Notification(Server Tamer,Checking Remote Server Status,5000,%s)' % icon)
+    xbmc.executebuiltin('Notification(Nas Remote,Checking Remote Server Status,5000,%s)' % icon)
     result = commands.getoutput("ping -c1 " + ipadd)
     if result.find("100% packet loss") == -1:
-        xbmc.executebuiltin('Notification(Server Tamer,Shutting Down Remote Server,3000,%s)' % icon)
+        xbmc.executebuiltin('Notification(Nas Remote,Shutting Down Remote Server,3000,%s)' % icon)
         os.system('ssh %s@%s %s ' % (user, ipadd, command))
         result = True
         while (result == True):
             check = commands.getoutput("ping -c1 " + ipadd)
             if check.find("100% packet loss") != -1:
                 result = False
-                xbmc.executebuiltin('Notification(Server Tamer,Server has successfully powered off,3000,%s)' % icon)
+                xbmc.executebuiltin('Notification(Nas Remote,Server has successfully powered off,3000,%s)' % icon)
     else:
-        xbmc.executebuiltin('Notification(Server Tamer,Waking Remote Server,3000,%s)' % icon)
+        xbmc.executebuiltin('Notification(Nas Remote,Waking Remote Server,3000,%s)' % icon)
         xbmc.executebuiltin("WakeOnLan(%s)" % mac)
         result = False
         while (result == False):
             check = commands.getoutput("ping -c1 " + ipadd)
             if check.find("100% packet loss") == -1:
                 result = True
-                xbmc.executebuiltin('Notification(Server Tamer,Server has successfully powered on,3000,%s)' % icon)
+                xbmc.executebuiltin('Notification(Nas Remote,Server has successfully powered on,3000,%s)' % icon)
 elif nr==1:
     dialog = xbmcgui.Dialog()
     cmd_input = dialog.input('Enter Command', type=xbmcgui.INPUT_ALPHANUM)
     if cmd_input != '':
-        xbmc.executebuiltin('Notification(Server Tamer,Sending Command,3000,%s)' % icon)
-        cmd_path = xbmc.translatePath("special://masterprofile/addon_data/plugin.program.servertamer")
+        xbmc.executebuiltin('Notification(Nas Remote,Sending Command,3000,%s)' % icon)
+        cmd_path = xbmc.translatePath("special://masterprofile/addon_data/script.nas.remote")
         os.system('ssh -o loglevel=error %s@%s %s &> %s/cmd.txt' % (user, ipadd, cmd_input, cmd_path)) 
         output = commands.getoutput("cat %s/cmd.txt" % cmd_path)
         if output != '':
@@ -81,5 +81,5 @@ elif nr==1:
 
             Viewer()
         else:
-             xbmc.executebuiltin('Notification(Server Tamer,No Output to Report,3000,%s)' % icon)
+             xbmc.executebuiltin('Notification(Nas Remote,No Output to Report,3000,%s)' % icon)
 
