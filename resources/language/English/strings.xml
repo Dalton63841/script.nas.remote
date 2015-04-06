@@ -3,4 +3,5 @@
     <string id="32012">Server IP Address</string>
     <string id="32013">Server Mac Address</string>
     <string id="32014">Command</string>
+    <string id="32015">SSH Port</string>
 </strings>
