@@ -13,6 +13,7 @@ ipadd = __addon__.getSetting("ipaddress")
 mac = __addon__.getSetting("macaddress")
 user = __addon__.getSetting("username")
 command = __addon__.getSetting("command")
+port = __addon__.getSetting("port")
 
 dialog = xbmcgui.Dialog()
 entries = ["Power On/Off", "Send A Command"]
@@ -22,7 +23,7 @@ if nr == 0:
     result = commands.getoutput("ping -c1 " + ipadd)
     if result.find("100% packet loss") == -1:
         xbmc.executebuiltin('Notification(Nas Remote,Shutting Down Remote Server,3000,%s)' % icon)
-        os.system('ssh %s@%s %s ' % (user, ipadd, command))
+        os.system('ssh -p %s %s@%s %s ' % (port, user, ipadd, command))
         result = True
         while (result == True):
             check = commands.getoutput("ping -c1 " + ipadd)
@@ -44,7 +45,7 @@ elif nr==1:
     if cmd_input != '':
         xbmc.executebuiltin('Notification(Nas Remote,Sending Command,3000,%s)' % icon)
         cmd_path = xbmc.translatePath("special://masterprofile/addon_data/script.nas.remote")
-        os.system('ssh -o loglevel=error %s@%s %s &> %s/cmd.txt' % (user, ipadd, cmd_input, cmd_path)) 
+        os.system('ssh -p %s -o loglevel=error %s@%s %s &> %s/cmd.txt' % (port, user, ipadd, cmd_input, cmd_path)) 
         output = commands.getoutput("cat %s/cmd.txt" % cmd_path)
         if output != '':
             class Viewer:
